@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f7f8fb;
+  --surface: #ffffff;
+  --surface-muted: #eef1f6;
+  --foreground: #0b1220;
+  --muted: #55606f;
+  --border: #e2e6ee;
+  --accent: #2563eb;
+  --accent-foreground: #ffffff;
+  --accent-soft: #e8f0fe;
+}
+
+.dark {
+  --background: #05070d;
+  --surface: #0d1220;
+  --surface-muted: #121828;
+  --foreground: #e7ebf3;
+  --muted: #97a3b6;
+  --border: #1d2536;
+  --accent: #5ba7ff;
+  --accent-foreground: #05070d;
+  --accent-soft: #10233f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
