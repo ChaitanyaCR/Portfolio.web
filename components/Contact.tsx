@@ -3,6 +3,7 @@
 import { Download, Mail, Phone, Send } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { SectionHeading } from "./SectionHeading";
+import { Container } from "./Container";
 import { GithubIcon, LinkedinIcon } from "./icons";
 import { profile } from "@/lib/content";
 
@@ -45,10 +46,11 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="mx-auto max-w-5xl px-6 py-16">
-      <SectionHeading eyebrow="Contact" title="Let's Talk" />
+    <section id="contact" className="border-t border-border bg-surface-muted/40 py-16 sm:py-24">
+      <Container>
+        <SectionHeading eyebrow="Contact" title="Let's Talk" />
 
-      <div className="grid gap-12 sm:grid-cols-2">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.3fr]">
         <div>
           <p className="max-w-sm text-muted">
             Open to conversations about architecture, banking & treasury systems, or your next
@@ -153,7 +155,8 @@ export function Contact() {
             </p>
           )}
         </form>
-      </div>
+        </div>
+      </Container>
     </section>
   );
 }

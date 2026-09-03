@@ -3,7 +3,7 @@ import { Resend } from "resend";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LENGTH = 5000;
-const CONTACT_TO_EMAIL = "chaitanya.r@surya-fintech.com";
+const CONTACT_TO_EMAIL = "c.rajchaitanya@outlook.com";
 
 function escapeHtml(value: string) {
   return value

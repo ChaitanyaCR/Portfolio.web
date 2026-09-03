@@ -10,6 +10,13 @@ export const profile = {
   resumeUrl: "/resume.pdf",
 };
 
+export const heroStats = [
+  { label: "Experience", value: "6+ Years", icon: "clock" as const },
+  { label: "Teams Led", value: "3-4 Engineers", icon: "users" as const },
+  { label: "Batch Optimization", value: "10 min → <30 sec", icon: "zap" as const },
+  { label: "Domain", value: "Banking & Treasury", icon: "landmark" as const },
+];
+
 export const about = {
   summary:
     "Senior Lead Software Engineer with 6+ years of experience designing, developing and optimizing complex enterprise banking and treasury applications. Hands-on expertise in C#, .NET 8/ASP.NET Core, Angular, React, REST APIs, SQL Server, Oracle, PostgreSQL, system design, and Azure DevOps. Proven experience leading teams of 3-4 engineers, architecting solutions from concept to production, translating business requirements into scalable technical outcomes, mentoring developers, and driving performance, maintainability and reusable engineering improvements. Currently leading the architecture of an enterprise Balance Sheet Management suite.",
@@ -61,7 +68,9 @@ export const experience: ExperienceEntry[] = [
       {
         title: "Senior Software Engineer",
         period: "Mar 2022 - Aug 2022",
-        bullets: [],
+        bullets: [
+          "Led a team of one developer and one tester to build and deploy an application using ASP.NET, JavaScript and SQL Server.",
+        ],
       },
       {
         title: "Software Engineer",
