@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Mail, Phone, Send } from "lucide-react";
+import { ArrowUpRight, Check, Copy, Download, LoaderCircle, Mail, Phone, Send } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { SectionHeading } from "./SectionHeading";
 import { Container } from "./Container";
@@ -10,6 +10,17 @@ import { profile } from "@/lib/content";
 type Status = "idle" | "sending" | "sent" | "error";
 
 export function Contact() {
+  const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
+
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      setCopyError(false);
+    } catch { setCopyError(true); }
+  }
+
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -46,115 +57,31 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="border-t border-border bg-surface-muted/40 py-16 sm:py-24">
+    <section id="contact" className="section contact-section">
       <Container>
-        <SectionHeading eyebrow="Contact" title="Let's Talk" />
-
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.3fr]">
-        <div>
-          <p className="max-w-sm text-muted">
-            Open to conversations about architecture, banking & treasury systems, or your next
-            engineering challenge. Reach out directly or use the form.
-          </p>
-
-          <div className="mt-6 space-y-3 text-sm">
-            <a
-              href={`mailto:${profile.email}`}
-              className="flex items-center gap-3 text-muted transition-colors hover:text-accent"
-            >
-              <Mail className="h-4 w-4" /> {profile.email}
-            </a>
-            <a
-              href={`tel:${profile.phone}`}
-              className="flex items-center gap-3 text-muted transition-colors hover:text-accent"
-            >
-              <Phone className="h-4 w-4" /> {profile.phone}
-            </a>
-            <a
-              href={profile.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-3 text-muted transition-colors hover:text-accent"
-            >
-              <LinkedinIcon className="h-4 w-4" /> LinkedIn
-            </a>
-            <a
-              href={profile.github}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-3 text-muted transition-colors hover:text-accent"
-            >
-              <GithubIcon className="h-4 w-4" /> GitHub
-            </a>
-            <a
-              href={profile.resumeUrl}
-              download
-              className="flex items-center gap-3 text-muted transition-colors hover:text-accent"
-            >
-              <Download className="h-4 w-4" /> Download Resume
-            </a>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="contact-layout">
           <div>
-            <label htmlFor="name" className="mb-1.5 block text-sm text-muted">
-              Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-accent"
-            />
+            <SectionHeading eyebrow="06 / GET IN TOUCH" title="Good work starts with a conversation." />
+            <p className="contact-description">Have an engineering challenge, a role in mind, or an interesting idea? Let’s talk about architecture, banking technology, and what we could build together.</p>
+            <div className="contact-email"><a href={`mailto:${profile.email}`}><Mail size={18} /><span>{profile.email}</span></a><button type="button" onClick={copyEmail} aria-label={copied ? "Email address copied" : "Copy email address"}>{copied ? <Check size={17} /> : <Copy size={17} />}</button></div>
+            <p className="copy-status" role="status">{copied ? "Email address copied." : copyError ? "Select the email address to copy it, or click to open your email app." : ""}</p>
+            <div className="contact-links">
+              <a href={`tel:+91${profile.phone}`}><Phone size={16} /> +91 {profile.phone} <ArrowUpRight size={14} /></a>
+              <a href={profile.resumeUrl} download><Download size={16} /> Download résumé <ArrowUpRight size={14} /></a>
+              {!profile.linkedin.includes("PLACEHOLDER") && <a href={profile.linkedin} target="_blank" rel="noreferrer"><LinkedinIcon className="h-4 w-4" /> LinkedIn <ArrowUpRight size={14} /></a>}
+              {!profile.github.includes("PLACEHOLDER") && <a href={profile.github} target="_blank" rel="noreferrer"><GithubIcon className="h-4 w-4" /> GitHub <ArrowUpRight size={14} /></a>}
+            </div>
           </div>
-          <div>
-            <label htmlFor="email" className="mb-1.5 block text-sm text-muted">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-accent"
-            />
-          </div>
-          <div>
-            <label htmlFor="message" className="mb-1.5 block text-sm text-muted">
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={4}
-              required
-              className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-accent"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={status === "sending"}
-            className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-          >
-            <Send className="h-4 w-4" />
-            {status === "sending" ? "Sending..." : "Send Message"}
-          </button>
-
-          {status === "sent" && (
-            <p className="text-sm text-accent">Thanks — your message has been sent.</p>
-          )}
-          {status === "error" && (
-            <p className="text-sm text-red-500">
-              {errorMessage}{" "}
-              <a href={`mailto:${profile.email}`} className="underline">
-                Email me directly instead.
-              </a>
-            </p>
-          )}
-        </form>
+          <form onSubmit={handleSubmit} className="contact-form" aria-busy={status === "sending"}>
+            <h3>Leave me a message</h3>
+            <p>Tell me a little about what you have in mind.</p>
+            <fieldset disabled={status === "sending"}>
+              <div className="form-row"><div><label htmlFor="name">Your name</label><input id="name" name="name" type="text" autoComplete="name" maxLength={200} placeholder="Alex Morgan" required /></div><div><label htmlFor="email">Email address</label><input id="email" name="email" type="email" autoComplete="email" maxLength={200} placeholder="alex@company.com" required /></div></div>
+              <div><label htmlFor="message">Your message</label><textarea id="message" name="message" rows={5} maxLength={5000} placeholder="I’d love to connect about…" required /></div>
+              <button type="submit" disabled={status === "sending"} className="button button-primary">{status === "sending" ? "Sending message…" : "Send message"}{status === "sending" ? <LoaderCircle size={17} className="animate-spin" /> : <Send size={17} />}</button>
+            </fieldset>
+            <div aria-live="polite" aria-atomic="true">{status === "sent" && <p className="form-success"><Check size={17} /> Thanks! Your message has been sent.</p>}{status === "error" && <p className="form-error">{errorMessage} <a href={`mailto:${profile.email}`}>Email me directly instead.</a></p>}</div>
+          </form>
         </div>
       </Container>
     </section>

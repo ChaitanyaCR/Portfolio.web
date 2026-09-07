@@ -1,45 +1,12 @@
+import { ArrowUpRight, Zap } from "lucide-react";
 import { SectionHeading } from "./SectionHeading";
 import { Container } from "./Container";
-import { experience } from "@/lib/content";
+import { experience, profile } from "@/lib/content";
 
 export function Experience() {
-  return (
-    <section id="experience" className="border-y border-border bg-surface-muted/40 py-16 sm:py-24">
-      <Container>
-        <SectionHeading eyebrow="Experience" title="Where I've Worked" />
-
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-x-12">
-          {experience.map((entry) => (
-            <div key={entry.company}>
-              <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="text-lg font-semibold">{entry.company}</h3>
-                <span className="text-sm text-muted">{entry.location}</span>
-              </div>
-
-              <div className="space-y-8 border-l border-border pl-6">
-                {entry.roles.map((role) => (
-                  <div key={role.title} className="relative">
-                    <span className="absolute -left-[29px] top-1.5 h-2.5 w-2.5 rounded-full bg-accent" />
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <h4 className="font-medium">{role.title}</h4>
-                      <span className="text-sm text-muted">{role.period}</span>
-                    </div>
-                    {role.bullets.length > 0 && (
-                      <ul className="mt-3 space-y-2">
-                        {role.bullets.map((bullet) => (
-                          <li key={bullet} className="text-sm leading-relaxed text-muted">
-                            {bullet}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
+  return <section id="experience" className="section"><Container>
+    <div className="experience-layout"><div><SectionHeading eyebrow="03 / THE JOURNEY" title="Growing impact. One role at a time." description="From building enterprise applications to leading the architecture and teams behind them." /><a href={profile.resumeUrl} download className="text-link">Get the full résumé <ArrowUpRight size={16} /></a>
+    <aside className="performance-callout"><Zap size={20} /><p className="mono">ENGINEERING IN PRACTICE</p><h3>~10 min <span>→ &lt;30 sec</span></h3><p>Reduced batch processing time through architecture and query optimization.</p></aside></div>
+    <div className="career-timeline">{experience.map(entry => <div key={entry.company} className="career-company"><div className="company-heading"><h3>{entry.company}</h3><span>{entry.location}</span></div>{entry.roles.map(role => <article key={role.title} className="career-role"><div className="role-meta"><span>{role.period.replaceAll(' - ', ' — ')}</span>{role.period.includes('Present') && <span className="current-badge">Current</span>}</div><h4>{role.title}</h4><ul>{role.bullets.map(bullet => <li key={bullet}>{bullet}</li>)}</ul></article>)}</div>)}</div></div>
+  </Container></section>;
 }
