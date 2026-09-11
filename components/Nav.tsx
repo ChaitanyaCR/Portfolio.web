@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Container } from "./Container";
@@ -15,7 +16,12 @@ const links = [
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
+  const [scrolled, setScrolled] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
+  const reduced = useReducedMotion();
+
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (value) => setScrolled(value > 80));
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -40,16 +46,63 @@ export function Nav() {
   }, [open]);
 
   return (
-    <header className="site-header">
+    <header className="site-header" data-scrolled={scrolled ? "" : undefined}>
       <Container>
         <nav className="main-nav" aria-label="Main navigation">
-          <a href="#top" className="wordmark" onClick={() => setOpen(false)} aria-label="Chaitanya Raj, back to top"><span className="brand-mark">cr<span>.</span></span><span>Chaitanya Raj<span className="brand-dot">.</span></span></a>
+          <a href="#top" className="wordmark" onClick={() => setOpen(false)} aria-label="Chaitanya Raj, back to top">
+            <span className="brand-mark">cr<span>.</span></span>
+            <span>Chaitanya Raj<span className="brand-dot">.</span></span>
+          </a>
           <ul className="desktop-links">
-            {links.map((link) => <li key={link.href}><a href={link.href} aria-current={active === link.href ? "location" : undefined}>{link.label}</a></li>)}
+            {links.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} aria-current={active === link.href ? "location" : undefined}>
+                  {link.label}
+                  {active === link.href && (
+                    reduced
+                      ? <span className="nav-indicator" />
+                      : <motion.span layoutId="nav-indicator" className="nav-indicator" transition={{ type: "spring", stiffness: 380, damping: 30 }} />
+                  )}
+                </a>
+              </li>
+            ))}
           </ul>
-          <div className="nav-actions"><ThemeToggle /><a href="#contact" className="nav-contact">Let’s talk <ArrowUpRight size={15} /></a><button ref={menuButton} type="button" className="menu-toggle" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(!open)}>{open ? <X size={20} /> : <Menu size={20} />}</button></div>
+          <div className="nav-actions">
+            <ThemeToggle />
+            <a href="#contact" className="nav-contact">Let’s talk <ArrowUpRight size={15} /></a>
+            <button
+              ref={menuButton}
+              type="button"
+              className="menu-toggle"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </nav>
-        {open && <nav id="mobile-menu" className="mobile-menu" aria-label="Mobile navigation">{[...links, { href: "#education", label: "Education" }, { href: "#contact", label: "Contact" }].map((link) => <a key={link.href} href={link.href} onClick={() => setOpen(false)} aria-current={active === link.href ? "location" : undefined}>{link.label}<ArrowUpRight size={16} /></a>)}</nav>}
+
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.nav
+              id="mobile-menu"
+              className="mobile-menu"
+              aria-label="Mobile navigation"
+              initial={reduced ? false : { height: 0, opacity: 0 }}
+              animate={reduced ? undefined : { height: "auto", opacity: 1 }}
+              exit={reduced ? undefined : { height: 0, opacity: 0 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {[...links, { href: "#education", label: "Education" }, { href: "#contact", label: "Contact" }].map((link) => (
+                <a key={link.href} href={link.href} onClick={() => setOpen(false)} aria-current={active === link.href ? "location" : undefined}>
+                  {link.label}<ArrowUpRight size={16} />
+                </a>
+              ))}
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </Container>
     </header>
   );
