@@ -28,7 +28,7 @@ The contact form (`components/Contact.tsx`) posts to `app/api/contact/route.ts`,
 email via [Resend](https://resend.com).
 
 1. Create a free Resend account and generate an API key.
-2. Set it locally in `.env.local`:
+2. Copy `.env.example` to `.env.local` and set your key:
    ```
    RESEND_API_KEY=re_xxxxxxxx
    ```
