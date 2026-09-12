@@ -15,6 +15,15 @@ export const profile = {
   availability: "OPEN TO SENIOR & ARCHITECT ROLES",
 };
 
+/**
+ * UI feature flags. Nothing is removed when a flag is off — the component, the styles and
+ * the /api/contact route all stay in place, so flipping this back to `true` restores it.
+ */
+export const features = {
+  /** Inline "Write a message" form in the contact section. */
+  contactForm: false,
+};
+
 export type ImpactStat = {
   /** Static display value, used when `countTo` is absent. */
   value?: string;
